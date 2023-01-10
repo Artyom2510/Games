@@ -2,6 +2,8 @@ import React, { FC, PropsWithChildren } from 'react';
 import { Card } from 'antd';
 import Link from 'next/link';
 import { TCommonCardData } from '../../models/commonCardData';
+import { getImage } from '../../clients';
+import { StyledImage } from './styles';
 
 const { Meta } = Card;
 
@@ -14,17 +16,15 @@ const CommonCard: FC<PropsWithChildren<TCommonCardData>> = ({
 	choice,
 	id
 }) => {
+	const { publicUrl } = getImage(image);
 	return (
 		<Link href={`/game/${id}`}>
 			<Card
 				hoverable
-				style={{ width: 240 }}
-				// cover={
-				// 	<img
-				// 		alt={title}
-				// 		src={image}
-				// 	/>
-				// }
+				style={{ width: 98 }}
+				cover={
+					<StyledImage alt={title} src={publicUrl} width={98} height={147} />
+				}
 			>
 				<Meta title={title} description={description} />
 			</Card>

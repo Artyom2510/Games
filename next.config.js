@@ -13,7 +13,7 @@ const nextConfig = {
 	// 	exportOnlyLocals: false
 	// },
 	images: {
-		domains: []
+		domains: [process.env.NEXT_PUBLIC_SUPABASE_URL_IMAGES]
 	},
 	webpack(config) {
 		config.module.rules.push({

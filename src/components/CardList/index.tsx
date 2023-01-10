@@ -1,19 +1,17 @@
+'use client';
+
 import React, { FC } from 'react';
-import { Col, Row } from 'antd';
 import GameCard from '../GameCard';
 import { TCardListProps } from './types';
+import { CardSect } from './styles';
 
 const CardList: FC<TCardListProps> = ({ data }) => {
 	return (
-		<Row gutter={16}>
+		<CardSect>
 			{data?.map(el => {
-				return (
-					<Col span={8} key={el.id}>
-						<GameCard {...el} />
-					</Col>
-				);
+				return <GameCard key={el.id} {...el} />;
 			})}
-		</Row>
+		</CardSect>
 	);
 };
 

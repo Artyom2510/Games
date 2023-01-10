@@ -10,7 +10,7 @@ export const createGameAction = createAsyncThunk<
 	{ rejectValue: string }
 >('games/create', async (values, { rejectWithValue }) => {
 	try {
-		await createGame(values);
+		return await createGame(values);
 	} catch (e) {
 		return rejectWithValue(handleHttpError(e));
 	}
@@ -22,7 +22,7 @@ export const getGamesAction = createAsyncThunk<
 	{ rejectValue: string }
 >('games/get', async (_, { rejectWithValue }) => {
 	try {
-		await getGamesList();
+		return await getGamesList();
 	} catch (e) {
 		return rejectWithValue(handleHttpError(e));
 	}
