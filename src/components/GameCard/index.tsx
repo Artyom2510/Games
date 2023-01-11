@@ -1,13 +1,16 @@
-import React, { FC, PropsWithChildren } from 'react';
-import { Card } from 'antd';
+import React, { FC, PropsWithChildren, useState } from 'react';
 import Link from 'next/link';
 import { TCommonCardData } from '../../models/commonCardData';
 import { getImage } from '../../clients';
-import { StyledImage } from './styles';
+import { Card, Content, StyledImage, Title } from './styles';
+import { Collapse } from 'antd';
+import { ratingScore } from '../../lib/utils/ratingScore';
+import ScoreTag from '../ScoreTag';
+import CardFooter from './CardFooter';
 
-const { Meta } = Card;
+const { Panel } = Collapse;
 
-const CommonCard: FC<PropsWithChildren<TCommonCardData>> = ({
+const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 	title,
 	description,
 	image,
@@ -17,19 +20,40 @@ const CommonCard: FC<PropsWithChildren<TCommonCardData>> = ({
 	id
 }) => {
 	const { publicUrl } = getImage(image);
+	const [isOpen, setIsOpen] = useState(false);
+
+	const handleTglContent = () => {
+		setIsOpen(prev => !prev);
+	};
+
+	const score = ratingScore(liked_count, disliked_count);
+
 	return (
-		<Link href={`/game/${id}`}>
-			<Card
-				hoverable
-				style={{ width: 98 }}
-				cover={
-					<StyledImage alt={title} src={publicUrl} width={98} height={147} />
-				}
-			>
-				<Meta title={title} description={description} />
-			</Card>
-		</Link>
+		<Card>
+			<Link href={`/game/${id}`}>
+				<StyledImage alt={title} src={publicUrl} width={98} height={147} />
+			</Link>
+			<Content>
+				<Link href={`/game/${id}`}>
+					<Title>{title}</Title>
+				</Link>
+				<Collapse onChange={handleTglContent}>
+					<Panel header={isOpen ? 'Hide' : 'Show'} key='1'>
+						<p>{description}</p>
+					</Panel>
+				</Collapse>
+
+				<CardFooter
+					id={id}
+					choice={choice}
+					disliked={disliked_count}
+					liked={liked_count}
+				/>
+			</Content>
+
+			{score !== 0 && <ScoreTag score={score} />}
+		</Card>
 	);
 };
 
-export default CommonCard;
+export default GameCard;

@@ -45,7 +45,10 @@ const CreateGame = () => {
 				label='Description game'
 				rules={[{ required: true, message: 'Please input description' }]}
 			>
-				<Input />
+				<Input.TextArea
+					autoSize={{ minRows: 2, maxRows: 6 }}
+					style={{ resize: 'none' }}
+				/>
 			</Form.Item>
 			<Form.Item
 				name='image'

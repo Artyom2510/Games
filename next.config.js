@@ -6,14 +6,16 @@ const nextConfig = {
 	swcMinify: true,
 	reactStrictMode: true,
 	experimental: { appDir: true },
-	// cssLoaderOptions: {
-	// 	mode: 'local',
-	// 	localIdentName: isDev ? '[local]--[hash:base64:4]' : '[hash:base64:8]',
-	// 	exportLocalsConvention: 'camelCase',
-	// 	exportOnlyLocals: false
-	// },
 	images: {
 		domains: [process.env.NEXT_PUBLIC_SUPABASE_URL_IMAGES]
+	},
+	eslint: {
+		dist: ['src']
+	},
+	compiler: {
+		styledComponents: {
+			ssr: true
+		}
 	},
 	webpack(config) {
 		config.module.rules.push({

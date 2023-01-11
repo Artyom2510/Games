@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import PageHeader from '../components/Header';
+import StyledComponentsRegistry from '../lib/registry';
 import Providers from '../providers';
 import './global.css';
 
@@ -10,7 +11,9 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
 			<body>
 				<Providers>
 					<PageHeader />
-					<main>{children}</main>
+					<main>
+						<StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+					</main>
 				</Providers>
 			</body>
 		</html>
