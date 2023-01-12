@@ -3,6 +3,7 @@ import { TCredentials } from '../models/credentials';
 import { clientData } from '../helpers/clientData';
 import { TCommonCard } from '../models/commonCard';
 import { TChoice, TCommonCardData } from '../models/commonCardData';
+import { RcFile } from 'antd/es/upload';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -37,20 +38,33 @@ const getImages = async () => {
 	return data;
 };
 
-const uploadImage = async (id, file) => {
+const getImage = (id: string) => {
+	const { data } = supabase.storage.from('images').getPublicUrl(`public/${id}`);
+
+	return data;
+};
+
+const uploadImage = async (file: RcFile) => {
+	const { uid, type } = file;
 	const { data, error } = await supabase.storage
 		.from('images')
-		.upload(`${id}`, file);
+		.upload(`public/${uid}`, file, {
+			upsert: false,
+			contentType: type
+		});
 	if (data) {
-		getImages();
+		return getImages();
 	} else {
 		console.log(error);
+		return error;
 	}
 };
 
 const createGame = async (game: TCommonCard) => {
 	const { data, error } = await supabase.from('games').insert(game).single();
-	if (error) console.log(error.message);
+	if (error) {
+		console.log(error);
+	}
 	return data;
 };
 
@@ -94,5 +108,6 @@ export {
 	signInSupabase,
 	logOutSupabase,
 	getImages,
+	getImage,
 	uploadImage
 };

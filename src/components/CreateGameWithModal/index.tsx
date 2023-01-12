@@ -23,8 +23,9 @@ const CreateGameWithModal = () => {
 				onCancel={handleTglModal}
 				closable
 				footer={null}
+				mask={false}
 			>
-				<CreateGame />
+				<CreateGame handleTglModal={handleTglModal} />
 			</Modal>
 		</GamesSect>
 	);

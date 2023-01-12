@@ -1,11 +1,14 @@
+import { getGamesList } from '../../clients';
+import CardList from '../../components/CardList';
 import CreateGameWithModal from '../../components/CreateGameWithModal';
-import Games from '../../components/Games';
 
 const GamesPage = async () => {
+	const games = await getGamesList();
+
 	return (
 		<>
 			<CreateGameWithModal />
-			<Games />
+			<CardList data={games} />
 		</>
 	);
 };

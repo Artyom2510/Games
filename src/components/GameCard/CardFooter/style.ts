@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-export const GamesSect = styled.section`
+export const Footer = styled.div`
 	display: flex;
 	justify-content: center;
-	padding: 24px;
+	padding: 12px;
 `;

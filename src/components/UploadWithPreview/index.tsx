@@ -1,57 +1,100 @@
-import { Modal, Upload, UploadFile, Button } from 'antd';
-import React, { useState } from 'react';
+import { message, Modal, Upload, UploadFile } from 'antd';
+import React, { FC, useState } from 'react';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import getBase64 from '../../helpers/getBase64';
-import { PlusOutlined } from '@ant-design/icons';
+import UploadButton from './UploadButton';
+import { uploadImage } from '../../clients';
+import { MAX_SIZE } from '../../constants';
+import { UploadWithPreviewProps } from './types';
 
-const UploadWithPreview = () => {
+const UploadWithPreview: FC<UploadWithPreviewProps> = ({
+	accept,
+	maxCount = 2,
+	handleChangeFile
+}) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
+	const [validFile, setValidFile] = useState(true);
 
 	const handleCancel = () => setPreviewOpen(false);
 
-	const handlePreview = async (file: UploadFile) => {
-		if (!file.url && !file.preview) {
-			file.preview = await getBase64(file.originFileObj as RcFile);
+	const handlePreview = async ({
+		url,
+		originFileObj,
+		preview,
+		name
+	}: UploadFile) => {
+		if (!url && !preview) {
+			preview = await getBase64(originFileObj);
 		}
 
-		setPreviewImage(file.url || (file.preview as string));
+		setPreviewImage(url || preview);
+		setPreviewTitle(name || url.substring(url.lastIndexOf('/') + 1));
 		setPreviewOpen(true);
-		setPreviewTitle(
-			file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1)
-		);
 	};
 
-	const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-		setFileList(newFileList);
+	const errorUpload = '123';
+	const errorSize = '123';
 
-	const uploadButton = (
-		<Button>
-			<PlusOutlined />
-			<p style={{ marginTop: 8 }}>Upload</p>
-		</Button>
-	);
+	const handleChangeUpload: UploadProps['onChange'] = ({
+		fileList: newFileList,
+		file
+	}: {
+		fileList: RcFile[];
+		file: RcFile;
+	}) => {
+		setValidFile(true);
+		validFile && setFileList(newFileList);
+	};
+
+	const beforeUpload = (file: RcFile) => {
+		const { type, size, uid } = file;
+		if (accept && type && !accept.includes(type.split('/')[1])) {
+			setValidFile(false);
+			message.error(`${errorUpload} ${accept}!`);
+			return;
+		}
+		if (size) {
+			const fileIsOversized = size / 1024 / 1024 < MAX_SIZE;
+			if (!fileIsOversized) {
+				setValidFile(false);
+				message.error(`${errorSize} ${MAX_SIZE}Mb!`);
+				return;
+			}
+		}
+		handleChangeFile(uid);
+		uploadImage(file);
+	};
+
+	const handleRemove = () => {
+		handleChangeFile(null);
+	};
 
 	return (
 		<>
 			<Upload
-				action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
 				listType='picture-card'
 				fileList={fileList}
 				onPreview={handlePreview}
-				onChange={handleChange}
+				onRemove={handleRemove}
+				onChange={handleChangeUpload}
+				beforeUpload={beforeUpload}
+				accept={accept}
+				maxCount={maxCount}
 			>
-				{fileList.length >= 8 ? null : uploadButton}
+				{fileList.length < maxCount && <UploadButton />}
 			</Upload>
 			<Modal
 				open={previewOpen}
 				title={previewTitle}
 				footer={null}
 				onCancel={handleCancel}
+				closable
+				mask={false}
 			>
-				<img alt='example' style={{ width: '100%' }} src={previewImage} />
+				<img alt='preview' style={{ width: '100%' }} src={previewImage} />
 			</Modal>
 		</>
 	);

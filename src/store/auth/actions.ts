@@ -13,6 +13,6 @@ export const login = createAsyncThunk<
 		await signUpSupabase(values);
 		await signIn('credentials', values);
 	} catch (e) {
-		return rejectWithValue(handleHttpError(e));
+		rejectWithValue(handleHttpError(e));
 	}
 });
