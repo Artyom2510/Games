@@ -25,7 +25,7 @@ const CreateGameWithModal = () => {
 				footer={null}
 				mask={false}
 			>
-				<CreateGame />
+				<CreateGame handleTglModal={handleTglModal} />
 			</Modal>
 		</GamesSect>
 	);

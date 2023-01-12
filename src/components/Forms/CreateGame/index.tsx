@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import React from 'react';
+import React, { FC } from 'react';
 import { IMAGE } from '../../../constants';
 import {
 	useAppDispatch,
@@ -8,8 +8,9 @@ import {
 import { TCommonCard } from '../../../models/commonCard';
 import { createGameAction } from '../../../store/games/actions';
 import UploadWithPreview from '../../UploadWithPreview';
+import { CreateGameProps } from './types';
 
-const CreateGame = () => {
+const CreateGame: FC<CreateGameProps> = ({ handleTglModal }) => {
 	const [form] = Form.useForm();
 	const { setFieldValue, setFields } = form;
 	const dispatch = useAppDispatch();
@@ -20,8 +21,9 @@ const CreateGame = () => {
 		url && setFields([{ name: 'image', errors: [] }]);
 	};
 
-	const handleSubmit = (values: TCommonCard) => {
-		dispatch(createGameAction(values));
+	const handleSubmit = async (values: TCommonCard) => {
+		await dispatch(createGameAction(values));
+		handleTglModal();
 	};
 
 	return (

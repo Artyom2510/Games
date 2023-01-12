@@ -2,7 +2,7 @@ import React, { FC, PropsWithChildren, useState } from 'react';
 import Link from 'next/link';
 import { TCommonCardData } from '../../models/commonCardData';
 import { getImage } from '../../clients';
-import { Card, Content, StyledImage, Title } from './styles';
+import { Card, Content, StyledLink, StyledImage, Title } from './styles';
 import { Collapse } from 'antd';
 import { ratingScore } from '../../lib/utils/ratingScore';
 import ScoreTag from '../ScoreTag';
@@ -34,11 +34,11 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 				<StyledImage alt={title} src={publicUrl} width={98} height={147} />
 			</Link>
 			<Content>
-				<Link href={`/game/${id}`}>
+				<StyledLink href={`/game/${id}`}>
 					<Title>{title}</Title>
-				</Link>
+				</StyledLink>
 				<Collapse onChange={handleTglContent}>
-					<Panel header={isOpen ? 'Hide' : 'Show'} key='1'>
+					<Panel header={isOpen ? 'Hide' : 'About'} key={id}>
 						<p>{description}</p>
 					</Panel>
 				</Collapse>

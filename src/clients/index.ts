@@ -62,7 +62,9 @@ const uploadImage = async (file: RcFile) => {
 
 const createGame = async (game: TCommonCard) => {
 	const { data, error } = await supabase.from('games').insert(game).single();
-	if (error) console.log(error.message);
+	if (error) {
+		console.log(error);
+	}
 	return data;
 };
 
