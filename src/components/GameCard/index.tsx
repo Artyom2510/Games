@@ -14,9 +14,8 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 	title,
 	description,
 	image,
-	disliked_count,
-	liked_count,
-	choice,
+	disliked,
+	liked,
 	id
 }) => {
 	const { publicUrl } = getImage(image);
@@ -26,15 +25,15 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 		setIsOpen(prev => !prev);
 	};
 
-	const score = ratingScore(liked_count, disliked_count);
+	const score = ratingScore(liked.length, disliked.length);
 
 	return (
 		<Card>
-			<Link href={`/game/${id}`}>
+			<Link href={`/games/${id}`}>
 				<StyledImage alt={title} src={publicUrl} width={98} height={147} />
 			</Link>
 			<Content>
-				<StyledLink href={`/game/${id}`}>
+				<StyledLink href={`/games/${id}`}>
 					<Title>{title}</Title>
 				</StyledLink>
 				<Collapse onChange={handleTglContent}>
@@ -45,9 +44,10 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 
 				<CardFooter
 					id={id}
-					choice={choice}
-					disliked={disliked_count}
-					liked={liked_count}
+					// todo choice
+					choice={null}
+					disliked={disliked}
+					liked={liked}
 				/>
 			</Content>
 

@@ -10,10 +10,37 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+const createUser = async (values: TCredentials) => {
+	const { data, error } = await supabase.from('users').insert(values).single();
+
+	if (error) {
+		return error;
+	}
+
+	return data;
+};
+
+// todo getUser on email
+const getUser = async (email: string) => {
+	const { data, error } = await supabase
+		.from('users')
+		.select()
+		.eq('email', email);
+
+	if (error) {
+		console.log(error);
+	}
+
+	return data;
+};
+
 const signUpSupabase = async (
 	values: TCredentials
 ): Promise<User | AuthError> => {
 	const supabaseData = await supabase.auth.signUp(values);
+	if (!supabaseData.error) {
+		await createUser(values);
+	}
 	return clientData(supabaseData);
 };
 
@@ -90,11 +117,18 @@ const getGamesList = async () => {
 	return data || [];
 };
 
-const likedGame = async (choice: TChoice) => {
+// const likedGame = async (choice: TChoice) => {
+// 	const { data, error } = await supabase
+// 		.from('games')
+// 		.select()
+// 		.eq('choice', choice);
+// 	return data || [];
+// };
+const likedGame = async (choice: TChoice, id: number) => {
 	const { data, error } = await supabase
 		.from('games')
-		.select()
-		.eq('choice', choice);
+		.insert([{ id: 2, [choice]: [`${id}`] }]);
+
 	return data || [];
 };
 
@@ -103,6 +137,8 @@ export {
 	createGame,
 	updateGame,
 	daleteGame,
+	createUser,
+	getUser,
 	getGamesList,
 	signUpSupabase,
 	signInSupabase,

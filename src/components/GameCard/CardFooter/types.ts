@@ -2,7 +2,7 @@ import { TChoice } from './../../../models/commonCardData';
 
 export type CardFooterProps = {
 	choice: TChoice;
-	disliked: number | null;
-	liked: number | null;
+	disliked: string[];
+	liked: string[];
 	id: number;
 };

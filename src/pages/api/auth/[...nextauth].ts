@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import nextAuth, { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { TCredentials } from '../../../models/credentials';
@@ -11,10 +12,10 @@ const authOptions: NextAuthOptions = {
 			type: 'credentials',
 			credentials: {},
 			authorize(credentials, req) {
-				const { email, nickname } = credentials as TCredentials;
+				const { email, nickname, name } = credentials as TCredentials;
 				return {
-					id: '2',
-					name: nickname,
+					id: nanoid(),
+					name: name ?? nickname,
 					email
 				};
 			}

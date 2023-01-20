@@ -7,7 +7,6 @@ export type TCommonCardData = {
 	title: string;
 	description: string;
 	user_id: string;
-	liked_count: number;
-	disliked_count: number;
-	choice: TChoice;
+	liked: string[];
+	disliked: string[];
 };
