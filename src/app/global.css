@@ -25,3 +25,7 @@ a {
 	color: inherit;
 	text-decoration: none;
 }
+
+.ant-form-item:last-child {
+	margin-bottom: 0;
+}

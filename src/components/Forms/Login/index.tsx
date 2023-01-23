@@ -1,20 +1,33 @@
 import { Button, Form, Input } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import React from 'react';
 import {
 	useAppDispatch,
 	useAppSelector
 } from '../../../hooks/useTypedSelector';
 import { TCredentials } from '../../../models/credentials';
-import { login } from '../../../store/auth/actions';
+import { signUpAction, signInAction } from '../../../store/auth/actions';
 import ErrorMessage from '../ErrorMessage';
+import { FromFooter } from './styles';
 
 const LoginForm = () => {
 	const dispatch = useAppDispatch();
+	const [form] = useForm<TCredentials>();
+	const { setFields, getFieldsValue } = form;
 
 	const { error, isLoading } = useAppSelector(store => store.auth);
 
+	const handleRemoveError = (name: string) => {
+		setFields([{ name, errors: [] }]);
+	};
+
 	const onFinish = async (values: TCredentials) => {
-		await dispatch(login(values));
+		await dispatch(signUpAction(values));
+	};
+
+	const handleSignIn = async () => {
+		const values = getFieldsValue();
+		await dispatch(signInAction(values));
 	};
 
 	return (
@@ -23,6 +36,7 @@ const LoginForm = () => {
 			onFinish={onFinish}
 			autoComplete='on'
 			layout='vertical'
+			form={form}
 			disabled={isLoading}
 		>
 			<Form.Item
@@ -37,7 +51,7 @@ const LoginForm = () => {
 					}
 				]}
 			>
-				<Input />
+				<Input onChange={() => handleRemoveError('email')} />
 			</Form.Item>
 
 			<Form.Item
@@ -48,27 +62,21 @@ const LoginForm = () => {
 					{ required: true, message: 'Please input your password!', min: 6 }
 				]}
 			>
-				<Input.Password />
-			</Form.Item>
-
-			<Form.Item
-				label='Your name'
-				name='name'
-				rules={[{ required: true, message: 'Please input your name!' }]}
-			>
-				<Input />
-			</Form.Item>
-
-			<Form.Item label='Your nickname' name='nickname'>
-				<Input />
+				<Input.Password onChange={() => handleRemoveError('password')} />
 			</Form.Item>
 
 			{error && <ErrorMessage err={error} />}
 
 			<Form.Item>
-				<Button type='primary' htmlType='submit'>
-					Submit
-				</Button>
+				<FromFooter>
+					<Button type='primary' htmlType='submit'>
+						Sign up
+					</Button>
+
+					<Button htmlType='button' onClick={handleSignIn}>
+						Sign in
+					</Button>
+				</FromFooter>
 			</Form.Item>
 		</Form>
 	);

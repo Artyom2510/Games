@@ -7,6 +7,7 @@ import { Collapse } from 'antd';
 import { ratingScore } from '../../lib/utils/ratingScore';
 import ScoreTag from '../ScoreTag';
 import CardFooter from './CardFooter';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 
 const { Panel } = Collapse;
 
@@ -19,10 +20,11 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 	id
 }) => {
 	const { publicUrl } = getImage(image);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isShowContent, setIsShowContent] = useState(false);
+	const isUser = useAppSelector(store => store.user.data);
 
 	const handleTglContent = () => {
-		setIsOpen(prev => !prev);
+		setIsShowContent(prev => !prev);
 	};
 
 	const score = ratingScore(liked.length, disliked.length);
@@ -37,18 +39,12 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 					<Title>{title}</Title>
 				</StyledLink>
 				<Collapse onChange={handleTglContent}>
-					<Panel header={isOpen ? 'Hide' : 'About'} key={id}>
+					<Panel header={isShowContent ? 'Hide' : 'About'} key={id}>
 						<p>{description}</p>
 					</Panel>
 				</Collapse>
 
-				<CardFooter
-					id={id}
-					// todo choice
-					choice={null}
-					disliked={disliked}
-					liked={liked}
-				/>
+				{isUser && <CardFooter disliked={disliked} liked={liked} id={id} />}
 			</Content>
 
 			{score !== 0 && <ScoreTag score={score} />}

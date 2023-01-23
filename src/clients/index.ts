@@ -1,3 +1,4 @@
+import { TUserCred } from './../models/credentials';
 import { createClient, User, AuthError } from '@supabase/supabase-js';
 import { TCredentials } from '../models/credentials';
 import { clientData } from '../helpers/clientData';
@@ -20,8 +21,7 @@ const createUser = async (values: TCredentials) => {
 	return data;
 };
 
-// todo getUser on email
-const getUser = async (email: string) => {
+const getUser = async (email: string): Promise<TUserCred> => {
 	const { data, error } = await supabase
 		.from('users')
 		.select()
@@ -31,7 +31,9 @@ const getUser = async (email: string) => {
 		console.log(error);
 	}
 
-	return data;
+	const { name, nickname, role, id } = data[0] as TUserCred;
+
+	return { name, nickname, role, id };
 };
 
 const signUpSupabase = async (
@@ -124,10 +126,15 @@ const getGamesList = async () => {
 // 		.eq('choice', choice);
 // 	return data || [];
 // };
-const likedGame = async (choice: TChoice, id: number) => {
+const likedGame = async (
+	oldChoice: TChoice | null,
+	choice: TChoice,
+	id: number,
+	userId: string
+) => {
 	const { data, error } = await supabase
 		.from('games')
-		.insert([{ id: 2, [choice]: [`${id}`] }]);
+		.upsert([{ id, [choice]: [userId] }]);
 
 	return data || [];
 };

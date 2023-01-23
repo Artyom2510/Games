@@ -12,11 +12,11 @@ const authOptions: NextAuthOptions = {
 			type: 'credentials',
 			credentials: {},
 			authorize(credentials, req) {
-				const { email, nickname, name } = credentials as TCredentials;
+				const { email } = credentials as TCredentials;
 				return {
 					id: nanoid(),
-					name: name ?? nickname,
-					email
+					email,
+					data: { ...credentials }
 				};
 			}
 		})

@@ -7,7 +7,7 @@ import { staticMenu } from './helper';
 
 const NavMenu: FC = () => {
 	const { status, data } = useSession();
-	const name = data?.user.name || data?.user.email || 'user';
+	const name = data?.user.email || 'guest';
 
 	const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 	const handletglLogin = () => {
@@ -29,7 +29,7 @@ const NavMenu: FC = () => {
 				key: 'subsystem-menu-me'
 			},
 			{
-				label: 'signOut',
+				label: 'Sign out',
 				key: 'subsystem-menu-exit',
 				onClick: signOut
 			}

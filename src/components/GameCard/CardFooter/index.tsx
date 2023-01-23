@@ -3,22 +3,25 @@ import React, { FC, useState } from 'react';
 import { CardFooterProps } from './types';
 import { DislikeOutlined, LikeOutlined } from '@ant-design/icons';
 import { TChoice } from '../../../models/commonCardData';
-import { updateGame, likedGame } from '../../../clients';
+import { likedGame } from '../../../clients';
 import { Footer } from './style';
-import { useSession } from 'next-auth/react';
+import { useAppSelector } from '../../../hooks/useTypedSelector';
 
 const { Group } = Radio;
 
-const CardFooter: FC<CardFooterProps> = ({ choice, liked, disliked, id }) => {
+const CardFooter: FC<CardFooterProps> = ({ liked, disliked, id }) => {
 	const [disabledRadio, setDisabledRadio] = useState(false);
-	const { data } = useSession();
+	const userId = useAppSelector(store => store.user.data?.id);
+	const isLiked = liked.includes(userId) ? 'liked' : null;
+	const isDisliked = disliked.includes(userId) ? 'disliked' : null;
+	const choice = isLiked || isDisliked;
 
 	// const prevLikedChoise = liked.includes()
 	// const prevDislikedChoise = disliked.includes()
 
 	const handleTglLike = async (e: RadioChangeEvent) => {
 		setDisabledRadio(true);
-		const choice = e.target.value as TChoice;
+		const currentChoice = e.target.value as TChoice;
 		// const partialUpdate = {
 		// 	choice: currentChoice,
 		// 	id
@@ -35,9 +38,8 @@ const CardFooter: FC<CardFooterProps> = ({ choice, liked, disliked, id }) => {
 		// 		partialUpdate['liked_count'] = liked - 1;
 		// 	}
 		// }
+		await likedGame(choice, currentChoice, id, userId);
 
-		// await updateGame(partialUpdate);
-		await likedGame(choice, 1);
 		setDisabledRadio(false);
 		message.warning('I dont know how I can revalidate data using supabase');
 	};
