@@ -119,22 +119,24 @@ const getGamesList = async () => {
 	return data || [];
 };
 
-// const likedGame = async (choice: TChoice) => {
-// 	const { data, error } = await supabase
-// 		.from('games')
-// 		.select()
-// 		.eq('choice', choice);
-// 	return data || [];
-// };
 const likedGame = async (
 	oldChoice: TChoice | null,
 	choice: TChoice,
 	id: number,
 	userId: string
 ) => {
-	const { data, error } = await supabase
-		.from('games')
-		.upsert([{ id, [choice]: [userId] }]);
+	if (!oldChoice) {
+		const { data, error } = await supabase
+			.from('games')
+			.upsert([{ id, [choice]: [userId] }]);
+
+		return data || [];
+	}
+	const { data, error } = await supabase.from('games').select().eq('id', id);
+	const newData: TCommonCardData = { ...data[0] };
+	newData[choice].push(userId);
+	newData[oldChoice] = newData[oldChoice].filter(el => el !== userId);
+	await supabase.from('games').update(newData).eq('id', id).single();
 
 	return data || [];
 };

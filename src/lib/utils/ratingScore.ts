@@ -11,5 +11,5 @@ export const ratingScore = (liked: number, disliked: number): number => {
 	}
 
 	const total = liked + disliked;
-	return (liked * 100) / total;
+	return Math.round((liked * 100) / total);
 };

@@ -11,35 +11,15 @@ const { Group } = Radio;
 
 const CardFooter: FC<CardFooterProps> = ({ liked, disliked, id }) => {
 	const [disabledRadio, setDisabledRadio] = useState(false);
-	const userId = useAppSelector(store => store.user.data?.id);
+	const userId = useAppSelector(store => store.user?.data?.id);
 	const isLiked = liked.includes(userId) ? 'liked' : null;
 	const isDisliked = disliked.includes(userId) ? 'disliked' : null;
 	const choice = isLiked || isDisliked;
 
-	// const prevLikedChoise = liked.includes()
-	// const prevDislikedChoise = disliked.includes()
-
 	const handleTglLike = async (e: RadioChangeEvent) => {
 		setDisabledRadio(true);
 		const currentChoice = e.target.value as TChoice;
-		// const partialUpdate = {
-		// 	choice: currentChoice,
-		// 	id
-		// };
-
-		// if (currentChoice === 'liked') {
-		// 	partialUpdate['liked_count'] = liked + 1;
-		// 	if (choice) {
-		// 		partialUpdate['disliked_count'] = disliked - 1;
-		// 	}
-		// } else {
-		// 	partialUpdate['disliked_count'] = disliked + 1;
-		// 	if (choice) {
-		// 		partialUpdate['liked_count'] = liked - 1;
-		// 	}
-		// }
 		await likedGame(choice, currentChoice, id, userId);
-
 		setDisabledRadio(false);
 		message.warning('I dont know how I can revalidate data using supabase');
 	};
