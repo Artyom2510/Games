@@ -1,22 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { pokemonApi } from '../services/pokemon.api';
 import authReducer from './auth';
 import gamesReducer from './games';
 import userReducer from './userData';
 
 const store = configureStore({
 	reducer: {
-		// [userAuthApi.reducerPath]: userAuthApi.reducer,
+		[pokemonApi.reducerPath]: pokemonApi.reducer,
 		auth: authReducer,
 		games: gamesReducer,
 		user: userReducer
 	},
-	middleware: getDefaultMiddleware => getDefaultMiddleware(),
-	// .concat(
-	//     userAuthApi.middleware,
-	//     storeProfileApi.middleware,
-	//     messengerApi.middleware,
-	//     productsApi.middleware,
-	// ),
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware().concat(pokemonApi.middleware),
 	devTools: process.env.NODE_ENV !== 'production'
 });
 
