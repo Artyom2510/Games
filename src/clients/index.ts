@@ -1,3 +1,4 @@
+import { TUserCred } from './../models/credentials';
 import { createClient, User, AuthError } from '@supabase/supabase-js';
 import { TCredentials } from '../models/credentials';
 import { clientData } from '../helpers/clientData';
@@ -10,10 +11,38 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+const createUser = async (values: TCredentials) => {
+	const { data, error } = await supabase.from('users').insert(values).single();
+
+	if (error) {
+		return error;
+	}
+
+	return data;
+};
+
+const getUser = async (email: string): Promise<TUserCred> => {
+	const { data, error } = await supabase
+		.from('users')
+		.select()
+		.eq('email', email);
+
+	if (error) {
+		console.log(error);
+	}
+
+	const { name, nickname, role, id } = data[0] as TUserCred;
+
+	return { name, nickname, role, id };
+};
+
 const signUpSupabase = async (
 	values: TCredentials
 ): Promise<User | AuthError> => {
 	const supabaseData = await supabase.auth.signUp(values);
+	if (!supabaseData.error) {
+		await createUser(values);
+	}
 	return clientData(supabaseData);
 };
 
@@ -90,11 +119,25 @@ const getGamesList = async () => {
 	return data || [];
 };
 
-const likedGame = async (choice: TChoice) => {
-	const { data, error } = await supabase
-		.from('games')
-		.select()
-		.eq('choice', choice);
+const likedGame = async (
+	oldChoice: TChoice | null,
+	choice: TChoice,
+	id: number,
+	userId: string
+) => {
+	if (!oldChoice) {
+		const { data, error } = await supabase
+			.from('games')
+			.upsert([{ id, [choice]: [userId] }]);
+
+		return data || [];
+	}
+	const { data, error } = await supabase.from('games').select().eq('id', id);
+	const newData: TCommonCardData = { ...data[0] };
+	newData[choice].push(userId);
+	newData[oldChoice] = newData[oldChoice].filter(el => el !== userId);
+	await supabase.from('games').update(newData).eq('id', id).single();
+
 	return data || [];
 };
 
@@ -103,6 +146,8 @@ export {
 	createGame,
 	updateGame,
 	daleteGame,
+	createUser,
+	getUser,
 	getGamesList,
 	signUpSupabase,
 	signInSupabase,

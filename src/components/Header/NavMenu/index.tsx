@@ -1,40 +1,62 @@
-import React, { FC } from 'react';
-import { Menu, Spin } from 'antd';
+import React, { FC, useState } from 'react';
+import { Menu, Modal, Spin } from 'antd';
 import { createLabel } from '../../../helpers/createLabel';
+import { signOut, useSession } from 'next-auth/react';
+import LoginForm from '../../Forms/Login';
+import { staticMenu } from './helper';
 
-// const NavMenu: FC<NavMenuProps> = () => {
 const NavMenu: FC = () => {
-	const headerMenu = [
-		{
-			label: createLabel('Games', '/games'),
-			key: 'games'
-		},
-		{ label: createLabel('Films', '/films'), key: 'films' }
-		// {
-		// 	label: `${currentData?.data[0].name}`,
-		// 	icon: <SettingOutlined />,
-		// 	key: 'system-menu',
-		// 	children: [
-		// 		{
-		// 			label: labelLang,
-		// 			key: 'subsystem-menu-1',
-		// 			children: freeLang
-		// 		},
-		// 		{ label: createLabel(name, '/me'), key: 'me' },
-		// 		{ label: exit, key: 'subsystem-menu-5', onClick: () => signOut() }
-		// 	]
-		// }
-	];
+	const { status, data } = useSession();
+	const name = data?.user.email || 'guest';
+
+	const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+	const handletglLogin = () => {
+		setIsLoginModalOpen(prev => !prev);
+	};
+
+	const navMenu = staticMenu(name);
+
+	if (status === 'unauthenticated') {
+		navMenu.at(-1)['children'].push({
+			label: 'Login',
+			key: 'subsystem-menu-login',
+			onClick: handletglLogin
+		});
+	} else {
+		navMenu.at(-1)['children'].push(
+			{
+				label: createLabel(name, '/me'),
+				key: 'subsystem-menu-me'
+			},
+			{
+				label: 'Sign out',
+				key: 'subsystem-menu-exit',
+				onClick: signOut
+			}
+		);
+	}
 
 	return (
-		<nav>
-			<Menu
-				theme='dark'
-				mode='horizontal'
-				disabledOverflow={true}
-				items={headerMenu}
-			/>
-		</nav>
+		<>
+			<nav>
+				<Menu
+					theme='dark'
+					mode='horizontal'
+					disabledOverflow={true}
+					items={navMenu}
+				/>
+			</nav>
+
+			<Modal
+				title='Login'
+				open={isLoginModalOpen}
+				onCancel={handletglLogin}
+				closable
+				footer={null}
+			>
+				<LoginForm />
+			</Modal>
+		</>
 	);
 };
 

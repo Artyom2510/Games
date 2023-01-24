@@ -1,5 +1,6 @@
 export const handleHttpError = (error: unknown) => {
-	const err = error as Error;
-	if (err.message) return err.message;
+	if (error instanceof Error) {
+		return error.message;
+	}
 	return 'unknown error';
 };

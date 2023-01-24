@@ -1,18 +1,29 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { signIn } from 'next-auth/react';
-import { signUpSupabase } from '../../clients';
+import { signInSupabase, signUpSupabase } from '../../clients';
 import { handleHttpError } from '../../helpers/handleHttpError';
 import { TCredentials } from '../../models/credentials';
+import { createAppAsyncThunk } from '../types';
 
-export const login = createAsyncThunk<
-	void,
-	TCredentials,
-	{ rejectValue: string }
->('auth/login', async (values, { rejectWithValue }) => {
-	try {
-		await signUpSupabase(values);
-		await signIn('credentials', values);
-	} catch (e) {
-		rejectWithValue(handleHttpError(e));
+export const signUpAction = createAppAsyncThunk<void, TCredentials>(
+	'auth/signUp',
+	async (values, { rejectWithValue }) => {
+		try {
+			await signUpSupabase(values);
+			signIn('credentials', values);
+		} catch (e) {
+			return rejectWithValue(handleHttpError(e));
+		}
 	}
-});
+);
+
+export const signInAction = createAppAsyncThunk<void, TCredentials>(
+	'auth/signIn',
+	async (values, { rejectWithValue }) => {
+		try {
+			await signInSupabase(values);
+			signIn('credentials', values);
+		} catch (e) {
+			return rejectWithValue(handleHttpError(e));
+		}
+	}
+);

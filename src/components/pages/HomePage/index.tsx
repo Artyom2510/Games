@@ -6,7 +6,7 @@ import { HomePageProps } from './types';
 
 const HomePage: FC<HomePageProps> = ({ posts }) => {
 	const { data } = useSession();
-	console.log(data);
+	console.log('data', data);
 	return (
 		<>
 			<div>

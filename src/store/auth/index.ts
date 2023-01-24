@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from './actions';
+import { signUpAction, signInAction } from './actions';
 import { TAuthState } from './types';
 
 const initialState: TAuthState = {
@@ -12,14 +12,25 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(login.pending, state => {
+		builder.addCase(signInAction.pending, state => {
 			state.isLoading = true;
 			state.error = null;
 		});
-		builder.addCase(login.fulfilled, state => {
+		builder.addCase(signInAction.fulfilled, state => {
 			state.isLoading = false;
 		});
-		builder.addCase(login.rejected, (state, { payload }) => {
+		builder.addCase(signInAction.rejected, (state, { payload }) => {
+			state.isLoading = false;
+			state.error = payload;
+		});
+		builder.addCase(signUpAction.pending, state => {
+			state.isLoading = true;
+			state.error = null;
+		});
+		builder.addCase(signUpAction.fulfilled, state => {
+			state.isLoading = false;
+		});
+		builder.addCase(signUpAction.rejected, (state, { payload }) => {
 			state.isLoading = false;
 			state.error = payload;
 		});

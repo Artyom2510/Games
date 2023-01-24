@@ -1,5 +1,11 @@
 export type TCredentials = {
 	email: string;
 	password: string;
-	nickname?: string;
+};
+
+export type TUserCred = {
+	name: string;
+	nickname: string;
+	role: 'admin' | 'user';
+	id: string;
 };

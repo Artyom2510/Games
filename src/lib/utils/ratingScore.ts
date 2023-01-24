@@ -1,9 +1,6 @@
-export const ratingScore = (
-	liked: number | null,
-	disliked: number | null
-): number => {
-	const isNoLiked = !liked;
-	const isNoDisliked = !disliked;
+export const ratingScore = (liked: number, disliked: number): number => {
+	const isNoLiked = liked === 0;
+	const isNoDisliked = disliked === 0;
 
 	if (isNoLiked && isNoDisliked) {
 		return 0;
@@ -13,10 +10,6 @@ export const ratingScore = (
 		return 100;
 	}
 
-	if (isNoLiked) {
-		return -100;
-	}
-
 	const total = liked + disliked;
-	return (liked * 100) / total;
+	return Math.round((liked * 100) / total);
 };
