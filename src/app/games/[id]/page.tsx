@@ -3,7 +3,7 @@ import { TPost } from '../../../models/post';
 
 const getGame = async () => {
 	const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-	const game = (await res.json()) as TPost;
+	const game: TPost = await res.json();
 	return game;
 };
 

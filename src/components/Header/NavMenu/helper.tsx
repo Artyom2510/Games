@@ -7,7 +7,7 @@ export const staticMenu = (name: string): ItemType[] => [
 		label: createLabel('Games', '/games'),
 		key: 'games'
 	},
-	{ label: createLabel('Films', '/films'), key: 'films' },
+	{ label: createLabel('Pokemons', '/pokemons'), key: 'pokemons' },
 	{
 		label: name,
 		icon: <SettingOutlined />,

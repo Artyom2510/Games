@@ -19,4 +19,5 @@ export const StyledLink = styled(Link)`
 export const StyledLogo = styled(Image)`
 	width: 100%;
 	height: auto;
+	border-radius: 50%;
 `;

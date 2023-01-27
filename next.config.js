@@ -6,8 +6,22 @@ const nextConfig = {
 	swcMinify: true,
 	reactStrictMode: true,
 	experimental: { appDir: true },
+	transpileModules: ['swiper'],
+	// images: {
+	// 	remotePatterns: [
+	// 		{
+	// 			protocol: 'https',
+	// 			hostname: 'raw.githubusercontent.com',
+	// 			port: '',
+	// 			pathname: '/**'
+	// 		}
+	// 	]
+	// },
 	images: {
-		domains: [process.env.NEXT_PUBLIC_SUPABASE_URL_IMAGES]
+		domains: [
+			process.env.NEXT_PUBLIC_SUPABASE_URL_IMAGES,
+			process.env.NEXT_PUBLIC_API_URL_IMAGES
+		]
 	},
 	eslint: {
 		dist: ['src']
