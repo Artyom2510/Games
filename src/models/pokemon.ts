@@ -335,3 +335,9 @@ export type Pokemon = {
 	types: Type[];
 	weight: number;
 };
+
+export type SimpleInfoPokemon = {
+	experience: number;
+	height: number;
+	weight: number;
+};

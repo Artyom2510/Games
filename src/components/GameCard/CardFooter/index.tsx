@@ -18,7 +18,7 @@ const CardFooter: FC<CardFooterProps> = ({ liked, disliked, id }) => {
 
 	const handleTglLike = async (e: RadioChangeEvent) => {
 		setDisabledRadio(true);
-		const currentChoice = e.target.value as TChoice;
+		const currentChoice: TChoice = e.target.value;
 		await likedGame(choice, currentChoice, id, userId);
 		setDisabledRadio(false);
 		message.warning('I dont know how I can revalidate data using supabase');

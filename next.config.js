@@ -6,6 +6,7 @@ const nextConfig = {
 	swcMinify: true,
 	reactStrictMode: true,
 	experimental: { appDir: true },
+	transpileModules: ['swiper'],
 	// images: {
 	// 	remotePatterns: [
 	// 		{

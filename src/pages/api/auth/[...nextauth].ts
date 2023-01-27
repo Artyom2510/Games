@@ -11,8 +11,8 @@ const authOptions: NextAuthOptions = {
 		Credentials({
 			type: 'credentials',
 			credentials: {},
-			authorize(credentials, req) {
-				const { email } = credentials as TCredentials;
+			authorize(credentials: TCredentials, req) {
+				const { email } = credentials;
 				return {
 					id: nanoid(),
 					email,
