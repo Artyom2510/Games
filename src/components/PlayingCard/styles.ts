@@ -11,6 +11,7 @@ export const StyledButton = styled(Button)<{ $isShowCard?: boolean }>`
 	padding: 0;
 	border: none;
 	outline: none !important;
+	cursor: ${({ $isShowCard }) => ($isShowCard ? 'not-allow' : 'pointer')};
 	transition: transform 0.2s ease;
 `;
 
