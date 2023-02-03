@@ -40,3 +40,9 @@ export const Title = styled.h3`
 	color: inherit;
 	transition: color 0.2s ease;
 `;
+
+export const ScoreTagWrap = styled.div`
+	position: absolute;
+	top: 12px;
+	right: 12px;
+`;

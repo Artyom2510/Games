@@ -1,4 +1,8 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import {
+	ActionCreatorsMapObject,
+	AsyncThunk,
+	createAsyncThunk
+} from '@reduxjs/toolkit';
 import store from '.';
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -9,3 +13,13 @@ export const createAppAsyncThunk = createAsyncThunk.withTypes<{
 	dispatch: AppDispatch;
 	rejectValue: string;
 }>();
+
+export type BoundActions<Actions extends ActionCreatorsMapObject> = {
+	[key in keyof Actions]: Actions[key] extends AsyncThunk<any, any, any>
+		? BoundAsyncThunk<Actions[key]>
+		: Actions[key];
+};
+
+export type BoundAsyncThunk<Thunk extends AsyncThunk<any, any, any>> = (
+	...args: Parameters<Thunk>
+) => ReturnType<ReturnType<Thunk>>;

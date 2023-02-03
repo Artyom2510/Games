@@ -2,12 +2,19 @@ import React, { FC, PropsWithChildren, useState } from 'react';
 import Link from 'next/link';
 import { TCommonCardData } from '../../models/commonCardData';
 import { getImage } from '../../clients';
-import { Card, Content, StyledLink, StyledImage, Title } from './styles';
+import {
+	Card,
+	Content,
+	StyledLink,
+	StyledImage,
+	Title,
+	ScoreTagWrap
+} from './styles';
 import { Collapse } from 'antd';
 import { ratingScore } from '../../lib/utils/ratingScore';
 import ScoreTag from '../ScoreTag';
 import CardFooter from './CardFooter';
-import { useAppSelector } from '../../hooks/useTypedSelector';
+import { useAppSelector } from '../../store/hooks/useTypedSelector';
 
 const { Panel } = Collapse;
 
@@ -47,7 +54,11 @@ const GameCard: FC<PropsWithChildren<TCommonCardData>> = ({
 				{isUser && <CardFooter disliked={disliked} liked={liked} id={id} />}
 			</Content>
 
-			{score !== 0 && <ScoreTag score={score} />}
+			{score !== 0 && (
+				<ScoreTagWrap>
+					<ScoreTag score={score} />
+				</ScoreTagWrap>
+			)}
 		</Card>
 	);
 };

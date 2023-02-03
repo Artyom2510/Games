@@ -1,17 +1,18 @@
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks/useTypedSelector';
-import { getUserAction } from '../store/userData/actions';
+import { useActionCreators } from '../store/hooks/useActions';
+import { useAppSelector } from '../store/hooks/useTypedSelector';
+import * as userActions from '../store/userData/actions';
 
 const AuthProvider = ({ children }) => {
-	const dispatch = useAppDispatch();
+	const actions = useActionCreators(userActions);
 	const { data: session } = useSession();
 	const email = session?.user.email;
 	const { data } = useAppSelector(store => store.user);
 
 	useEffect(() => {
 		if (!data && email) {
-			dispatch(getUserAction(email));
+			actions.getUserAction(email);
 		}
 	}, [data, email]);
 

@@ -7,6 +7,7 @@ const GamesPage = async () => {
 
 	return (
 		<>
+			<h1 style={{ textAlign: 'center' }}>Get data using SSR</h1>
 			<CreateGameWithModal />
 			<CardList data={games} />
 		</>

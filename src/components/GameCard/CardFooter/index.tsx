@@ -5,7 +5,7 @@ import { DislikeOutlined, LikeOutlined } from '@ant-design/icons';
 import { TChoice } from '../../../models/commonCardData';
 import { likedGame } from '../../../clients';
 import { Footer } from './style';
-import { useAppSelector } from '../../../hooks/useTypedSelector';
+import { useAppSelector } from '../../../store/hooks/useTypedSelector';
 
 const { Group } = Radio;
 

@@ -1,3 +1,1 @@
-export type TGameFullCardProps = {
-	info: any;
-};
+export type TGameFullCardProps = {};

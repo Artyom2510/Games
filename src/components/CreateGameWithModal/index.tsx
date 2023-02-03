@@ -5,7 +5,7 @@ import CreateGame from '../Forms/CreateGame';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { CreateGamesWraper } from './styles';
-import { useAppSelector } from '../../hooks/useTypedSelector';
+import { useAppSelector } from '../../store/hooks/useTypedSelector';
 
 const CreateGameWithModal = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);

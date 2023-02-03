@@ -1,17 +1,15 @@
 import { Button, Form, Input } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React from 'react';
-import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../hooks/useTypedSelector';
+import { useAppSelector } from '../../../store/hooks/useTypedSelector';
 import { TCredentials } from '../../../models/credentials';
-import { signUpAction, signInAction } from '../../../store/auth/actions';
+import * as authActions from '../../../store/auth/actions';
 import ErrorMessage from '../ErrorMessage';
 import { FromFooter } from './styles';
+import { useActionCreators } from '../../../store/hooks/useActions';
 
 const LoginForm = () => {
-	const dispatch = useAppDispatch();
+	const actions = useActionCreators(authActions);
 	const [form] = useForm<TCredentials>();
 	const { setFields, getFieldsValue } = form;
 
@@ -22,12 +20,12 @@ const LoginForm = () => {
 	};
 
 	const onFinish = async (values: TCredentials) => {
-		await dispatch(signUpAction(values));
+		await actions.signUpAction(values);
 	};
 
 	const handleSignIn = async () => {
 		const values = getFieldsValue();
-		await dispatch(signInAction(values));
+		await actions.signInAction(values);
 	};
 
 	return (

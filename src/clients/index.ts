@@ -5,6 +5,7 @@ import { clientData } from '../helpers/clientData';
 import { TCommonCard } from '../models/commonCard';
 import { TChoice, TCommonCardData } from '../models/commonCardData';
 import { RcFile } from 'antd/es/upload';
+import { TMemoGame } from '../models/memoGame';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -115,7 +116,7 @@ const daleteGame = async (id: number) => {
 };
 
 const getGamesList = async () => {
-	const { data, error } = await supabase.from('games').select();
+	const { data, error } = await supabase.from('games').select().order('id');
 	return data || [];
 };
 
@@ -141,6 +142,20 @@ const likedGame = async (
 	return data || [];
 };
 
+const setRecord = async ({ record, userId }: TMemoGame) => {
+	const { data, error } = await supabase
+		.from('memo')
+		.update(record)
+		.eq('user_id', userId)
+		.single();
+
+	if (error) {
+		console.log(error);
+	}
+
+	return record;
+};
+
 export {
 	likedGame,
 	createGame,
@@ -154,5 +169,6 @@ export {
 	logOutSupabase,
 	getImages,
 	getImage,
-	uploadImage
+	uploadImage,
+	setRecord
 };

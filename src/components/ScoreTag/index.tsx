@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { StyledTag } from './styles';
 import { ScoreTagProps, TColorTag } from './types';
 
-const ScoreTag: FC<ScoreTagProps> = ({ score }) => {
+const ScoreTag: FC<ScoreTagProps> = ({ score, size = 'lg' }) => {
 	let scoreType: TColorTag;
 
 	if (score > 50) {
@@ -13,7 +13,11 @@ const ScoreTag: FC<ScoreTagProps> = ({ score }) => {
 		scoreType = 'red';
 	}
 
-	return <StyledTag color={scoreType}>{score}</StyledTag>;
+	return (
+		<StyledTag color={scoreType} $size={size}>
+			{score}
+		</StyledTag>
+	);
 };
 
 export default ScoreTag;

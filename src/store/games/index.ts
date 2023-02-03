@@ -29,9 +29,8 @@ export const gamesSlice = createSlice({
 			state.isLoading = true;
 			state.error = null;
 		});
-		builder.addCase(createGameAction.fulfilled, (state, { payload }) => {
+		builder.addCase(createGameAction.fulfilled, state => {
 			state.isLoading = false;
-			// state.games.push(payload);
 		});
 		builder.addCase(createGameAction.rejected, (state, { payload }) => {
 			state.isLoading = false;

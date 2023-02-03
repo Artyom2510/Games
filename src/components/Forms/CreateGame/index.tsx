@@ -1,19 +1,17 @@
 import { Button, Form, Input } from 'antd';
 import React, { FC } from 'react';
 import { IMAGE } from '../../../constants';
-import {
-	useAppDispatch,
-	useAppSelector
-} from '../../../hooks/useTypedSelector';
+import { useAppSelector } from '../../../store/hooks/useTypedSelector';
 import { TCommonCard } from '../../../models/commonCard';
-import { createGameAction } from '../../../store/games/actions';
+import * as gameActions from '../../../store/games/actions';
 import UploadWithPreview from '../../UploadWithPreview';
 import { CreateGameProps } from './types';
+import { useActionCreators } from '../../../store/hooks/useActions';
 
 const CreateGame: FC<CreateGameProps> = ({ handleTglModal }) => {
 	const [form] = Form.useForm();
 	const { setFieldValue, setFields } = form;
-	const dispatch = useAppDispatch();
+	const actions = useActionCreators(gameActions);
 	const { error, isLoading } = useAppSelector(store => store.games);
 
 	const handleChangeFile = (url: string | null) => {
@@ -22,8 +20,12 @@ const CreateGame: FC<CreateGameProps> = ({ handleTglModal }) => {
 	};
 
 	const handleSubmit = async (values: TCommonCard) => {
-		await dispatch(createGameAction(values));
-		handleTglModal();
+		actions
+			.createGameAction(values)
+			.unwrap()
+			.then(() => {
+				handleTglModal();
+			});
 	};
 
 	return (

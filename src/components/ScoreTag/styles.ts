@@ -1,15 +1,15 @@
 import { Tag } from 'antd';
 import styled from 'styled-components';
+import { TSizeTag } from './types';
 
-export const StyledTag = styled(Tag)`
-	position: absolute;
-	top: 12px;
-	right: 12px;
+export const StyledTag = styled(Tag)<{ $size: TSizeTag }>`
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: ${({ $size }) => ($size === 'lg' ? '52px' : '28px')};
+	height: ${({ $size }) => ($size === 'lg' ? '52px' : '28px')};
 	margin: 0;
-	width: 52px;
-	height: 52px;
-	font-size: 20px;
+	font-size: ${({ $size }) => ($size === 'lg' ? '20px' : '16px')};
 	font-weight: 600;
-	line-height: 52px;
-	text-align: center;
+	line-height: 1;
 `;
